@@ -1,7 +1,8 @@
 {
   "projects": {
     "default": "dev-gohaba-auth",
+    "dev": "dev-gohaba-auth",
     "main": "prod-gohaba-auth",
-    "staging": "staging-gohaba-auth",
+    "staging": "staging-gohaba-auth"
   }
 }
