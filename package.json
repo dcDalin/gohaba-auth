@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/dcDalin/gohaba-auth/issues"
   },
-  "homepage": "https://github.com/dcDalin/gohaba-auth#readme"
+  "homepage": "https://github.com/dcDalin/gohaba-auth#readme",
+  "devDependencies": {
+    "firebase-ci": "^0.15.1",
+    "firebase-tools": "^9.23.0"
+  }
 }
