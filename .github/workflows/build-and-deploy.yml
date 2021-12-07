@@ -3,8 +3,9 @@ name: Deploy Brawndo
 on:
   push:
     branches:
-      - master
+      - main
       - prod
+      - dev
 
 jobs:
   deploy:
