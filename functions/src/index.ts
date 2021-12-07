@@ -1,9 +1,16 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+admin.initializeApp(functions.config().firebase);
+
+export const userSignIn = functions.auth.user().onCreate((user) => {
+  const customClaims = {
+    "https://hasura.io/jwt/claims": {
+      "x-hasura-allowed-roles": ["user"],
+      "x-hasura-default-role": "user",
+      "x-hasura-user-id": user.uid,
+    },
+  };
+
+  return admin.auth().setCustomUserClaims(user.uid, customClaims);
+});

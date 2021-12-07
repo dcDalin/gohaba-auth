@@ -1,4 +1,4 @@
-name: Deploy Brawndo
+name: GoHaba Auth
 
 on:
   push:
