@@ -1,0 +1,29 @@
+name: Deploy Brawndo
+
+on:
+  push:
+    branches:
+      - master
+      - prod
+
+jobs:
+  deploy:
+    name: ${{ matrix.app }} Deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Firebase Deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          $(npm bin)/firebase-ci deploy
