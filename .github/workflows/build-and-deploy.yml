@@ -1,10 +1,10 @@
-name: Deploy Brawndo
+name: GoHaba Auth
 
 on:
   push:
     branches:
       - main
-      - prod
+      - staging
       - dev
 
 jobs:
