@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp(functions.config().firebase);
 
-export const userSignUp = functions.auth.user().onCreate(async (user) => {
+export const userSignUp = functions.auth.user().onCreate((user) => {
   const customClaims = {
     "https://hasura.io/jwt/claims": {
       "x-hasura-allowed-roles": ["user", "anonymous"],
@@ -12,12 +12,5 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
     },
   };
 
-  try {
-    await admin.auth().setCustomUserClaims(user.uid, customClaims);
-    const metadataRef = admin.database().ref("/metadata/" + user.uid);
-
-    return metadataRef.set({ refreshTime: new Date().getTime() });
-  } catch (error) {
-    console.error({ error });
-  }
+  return admin.auth().setCustomUserClaims(user.uid, customClaims);
 });

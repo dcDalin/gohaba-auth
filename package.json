@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/dcDalin/gohaba-auth#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "firebase-ci": "^0.15.1",
     "firebase-tools": "^9.23.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }
