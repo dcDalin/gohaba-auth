@@ -13,8 +13,8 @@ type UserProfileArgs = {
 };
 
 const HASURA_OPERATION = `
-  mutation MyMutation($email: String = "", $displayName: String = "", $id: String = "") {
-    insert_users_one(object: {email: $email, displayName: $displayName, id: $id}) {
+  mutation MyMutation($email: String = "", $id: String = "", $displayName: String = "") {
+    insert_users_one(object: {email: $email, id: $id, displayName: $displayName}) {
       id
     }
   }
