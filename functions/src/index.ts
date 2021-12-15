@@ -24,6 +24,9 @@ const execute = async (variables: UserProfileArgs): Promise<any> => {
   const fetchResponse = await fetch(
     "https://dev-gohaba.hasura.app/v1/graphql",
     {
+      headers: {
+        "x-hasura-role": "anonymous",
+      },
       method: "POST",
       body: JSON.stringify({
         query: HASURA_OPERATION,
@@ -58,6 +61,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
     // if Hasura operation errors, then throw error
     if (errors) {
       await admin.auth().deleteUser(uid);
+      return;
     }
     return newUser;
   } catch (error) {
