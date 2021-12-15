@@ -61,7 +61,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
     // if Hasura operation errors, then throw error
     if (errors) {
       await admin.auth().deleteUser(uid);
-      return;
+      throw new Error(errors);
     }
     return newUser;
   } catch (error) {
