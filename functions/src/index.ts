@@ -1,7 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import fetch from "node-fetch";
-import { getDatabase } from "firebase-admin/getd";
 
 admin.initializeApp(functions.config().firebase);
 
