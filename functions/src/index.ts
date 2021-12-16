@@ -48,7 +48,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
     customClaims = {
       "https://hasura.io/jwt/claims": {
         "x-hasura-allowed-roles": ["staff", "anonymous"],
-        "x-hasura-default-role": "user",
+        "x-hasura-default-role": "staff",
         "x-hasura-user-id": user.uid,
         admin: true,
         accessLevel: 9,
