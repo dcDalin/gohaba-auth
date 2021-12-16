@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import fetch from "node-fetch";
+import { getDatabase } from "firebase-admin/getd";
 
 admin.initializeApp(functions.config().firebase);
 
@@ -51,9 +52,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
       },
     };
 
-    const newUser = await admin
-      .auth()
-      .setCustomUserClaims(user.uid, customClaims);
+    await admin.auth().setCustomUserClaims(user.uid, customClaims);
 
     // execute the Hasura operation
     const { errors } = await execute({ email, id: uid, displayName });
@@ -65,7 +64,13 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
       throw new Error(errors);
     }
     functions.logger.info("New user created: ", email);
-    return newUser;
+
+    // Update real-time database to notify client to force refresh.
+    const metadataRef = admin.database().ref("/metadata/" + user.uid);
+
+    // Set the refresh time to the current UTC timestamp.
+    // This will be captured on the client to force a token refresh.
+    return metadataRef.set({ refreshTime: new Date().getTime() });
   } catch (error) {
     console.error({ error });
   }
