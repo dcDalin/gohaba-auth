@@ -47,7 +47,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
   if (user.email && user.email === "mcdalinoluoch@gmail.com") {
     customClaims = {
       "https://hasura.io/jwt/claims": {
-        "x-hasura-allowed-roles": ["user", "anonymous"],
+        "x-hasura-allowed-roles": ["staff", "anonymous"],
         "x-hasura-default-role": "user",
         "x-hasura-user-id": user.uid,
         admin: true,
