@@ -41,17 +41,31 @@ const execute = async (variables: UserProfileArgs): Promise<any> => {
 };
 
 export const userSignUp = functions.auth.user().onCreate(async (user) => {
-  try {
-    const { email, uid, displayName } = user;
+  const { email, uid, displayName } = user;
 
-    const customClaims = {
+  let customClaims;
+
+  if (user.email && user.email === "mcdalinoluoch@gmail.com") {
+    customClaims = {
+      "https://hasura.io/jwt/claims": {
+        "x-hasura-allowed-roles": ["user", "anonymous"],
+        "x-hasura-default-role": "user",
+        "x-hasura-user-id": user.uid,
+      },
+      admin: true,
+      accessLevel: 9,
+    };
+  } else {
+    customClaims = {
       "https://hasura.io/jwt/claims": {
         "x-hasura-allowed-roles": ["user", "anonymous"],
         "x-hasura-default-role": "user",
         "x-hasura-user-id": user.uid,
       },
     };
+  }
 
+  try {
     await admin.auth().setCustomUserClaims(user.uid, customClaims);
 
     // execute the Hasura operation
