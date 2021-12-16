@@ -20,6 +20,8 @@ const HASURA_OPERATION = `
   }
 `;
 
+const ADMIN_EMAIL = "mcdalinoluoch@gmail.com";
+
 const execute = async (variables: UserProfileArgs): Promise<any> => {
   const fetchResponse = await fetch(
     "https://dev-gohaba.hasura.app/v1/graphql",
@@ -44,7 +46,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
 
   let customClaims;
 
-  if (user.email && user.email === "mcdalinoluoch@gmail.com") {
+  if (user.email && user.email === ADMIN_EMAIL) {
     customClaims = {
       "https://hasura.io/jwt/claims": {
         "x-hasura-allowed-roles": ["staff", "anonymous"],
@@ -76,7 +78,12 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
       functions.logger.error("Hasura errors: ", errors);
       throw new Error(errors);
     }
-    functions.logger.info("New user created: ", email);
+
+    if (user.email === ADMIN_EMAIL) {
+      functions.logger.info("Admin user created: ", email);
+    } else {
+      functions.logger.info("New user created: ", email);
+    }
 
     // Update real-time database to notify client to force refresh.
     const metadataRef = admin.database().ref("/metadata/" + user.uid);
