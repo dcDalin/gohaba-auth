@@ -40,16 +40,16 @@ const execute = async (variables: UserProfileArgs): Promise<any> => {
 };
 
 export const userSignUp = functions.auth.user().onCreate(async (user) => {
-  const customClaims = {
-    "https://hasura.io/jwt/claims": {
-      "x-hasura-allowed-roles": ["user", "anonymous"],
-      "x-hasura-default-role": "user",
-      "x-hasura-user-id": user.uid,
-    },
-  };
-
   try {
     const { email, uid, displayName } = user;
+
+    const customClaims = {
+      "https://hasura.io/jwt/claims": {
+        "x-hasura-allowed-roles": ["user", "anonymous"],
+        "x-hasura-default-role": "user",
+        "x-hasura-user-id": user.uid,
+      },
+    };
 
     const newUser = await admin
       .auth()
@@ -64,6 +64,7 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
       functions.logger.error("Hasura errors: ", errors);
       throw new Error(errors);
     }
+    functions.logger.info("New user created: ", email);
     return newUser;
   } catch (error) {
     console.error({ error });
