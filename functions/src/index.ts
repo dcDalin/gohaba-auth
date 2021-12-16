@@ -50,9 +50,9 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
         "x-hasura-allowed-roles": ["user", "anonymous"],
         "x-hasura-default-role": "user",
         "x-hasura-user-id": user.uid,
+        admin: true,
+        accessLevel: 9,
       },
-      admin: true,
-      accessLevel: 9,
     };
   } else {
     customClaims = {
