@@ -1,9 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import fetch from "node-fetch";
-import * as express from "express";
-
-const app = express();
+import type { HttpsFunction } from "firebase-functions";
 
 admin.initializeApp(functions.config().firebase);
 
@@ -102,9 +100,9 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
 
 export const getAllUsers = functions.https.onRequest(async (_req, res) => {
   try {
-    const users = (await admin.auth().listUsers()).users;
+    const users: any = (await admin.auth().listUsers()).users;
     functions.logger.info("Fetched all users ");
-    return res.status(200).json({ data: users });
+    return users;
   } catch (error) {
     functions.logger.error("Could not fetch all users: ", error);
     return res.status(400).json({ errors: error });
