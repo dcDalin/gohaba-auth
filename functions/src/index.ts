@@ -1,6 +1,9 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import fetch from "node-fetch";
+import * as express from "express";
+
+const app = express();
 
 admin.initializeApp(functions.config().firebase);
 
@@ -93,5 +96,17 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
     return metadataRef.set({ refreshTime: new Date().getTime() });
   } catch (error) {
     console.error({ error });
+    return error;
+  }
+});
+
+export const getAllUsers = functions.https.onRequest(async (_req, res) => {
+  try {
+    const users = (await admin.auth().listUsers()).users;
+    functions.logger.info("Fetched all users ");
+    return res.status(200).json({ data: users });
+  } catch (error) {
+    functions.logger.error("Could not fetch all users: ", error);
+    return res.status(400).json({ errors: error });
   }
 });
