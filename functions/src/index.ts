@@ -1,7 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import fetch from "node-fetch";
-import type { HttpsFunction } from "firebase-functions";
 
 admin.initializeApp(functions.config().firebase);
 
