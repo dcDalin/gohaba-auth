@@ -97,13 +97,15 @@ export const userSignUp = functions.auth.user().onCreate(async (user) => {
   }
 });
 
-export const getAllUsers = functions.https.onRequest(async (_req, res) => {
-  try {
-    const users: any = (await admin.auth().listUsers()).users;
-    functions.logger.info("Fetched all users ");
-    return users;
-  } catch (error) {
-    functions.logger.error("Could not fetch all users: ", error);
-    return res.status(400).json({ errors: error });
-  }
+export const getAllUsers = functions.https.onRequest((_req, res) => {
+  admin
+    .auth()
+    .listUsers(100)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json(error);
+    });
 });
