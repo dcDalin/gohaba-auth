@@ -102,10 +102,11 @@ export const getAllUsers = functions.https.onRequest((_req, res) => {
     .auth()
     .listUsers(100)
     .then((result) => {
+      functions.logger.debug("Get all users is: ", result);
       res.status(200).json(result);
     })
     .catch((error) => {
-      console.log(error);
+      functions.logger.error("Failed get all users error is: ", error);
       res.status(400).json(error);
     });
 });
